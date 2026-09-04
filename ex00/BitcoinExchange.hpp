@@ -14,16 +14,29 @@
 # define BITCOINEXCHANGE_HPP
 
 #include <iostream>
-template <typename T>
-class BitcoinExchange : public std::deque<T>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <string>
+#include <cstdlib>
+#include <iomanip>
+
+class BitcoinExchange
 {
 	public:
 		BitcoinExchange();
 		~BitcoinExchange();
 		
-		StoreDB(void);
+		void	loadDatabase(const std::string &filename);
+		void	processInput(const std::string &filename);
+	
 	private:
+		std::map<std::string, float>	_priceDB;  // STL Container: map para almacenar fecha -> tasa de cambio
 		
+		bool	_isValidDate(const std::string &date);
+		bool	_isValidValue(const std::string &value);
+		float	_stringToFloat(const std::string &str);
+		void	_processLine(const std::string &line);
 };
 
 #endif
