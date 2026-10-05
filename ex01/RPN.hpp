@@ -4,13 +4,19 @@
 #include <string>
 #include <stack>
 
-template <typename T>
-class RPN : public std::stack<T>
+class RPN
 {
 	public:
 		RPN(void);
-		RPN(char* argv[]);
-		RPN(const RPN obj);
-		RPN &operator=(const RPN obj);
+		RPN(const RPN &obj);
+		RPN &operator=(const RPN &obj);
 		~RPN(void);
+		
+		void evaluate(const std::string &expression);
+
+		private:
+			std::stack<int> _stack;
+			void _applyOperation(char operation);
+
+
 };
