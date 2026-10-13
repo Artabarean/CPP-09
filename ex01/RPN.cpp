@@ -24,9 +24,11 @@ void RPN::evaluate(const std::string &expression)
 	std::stringstream input(expression);
 	std::string token;
 
+	while (!_stack.empty())
+		_stack.pop();
+
 	while (input >> token)
 	{
-		std::cout << token << ";" << std::endl;
 		if (token.length() == 1 && std::isdigit(token[0]))
 			_stack.push(token[0] - '0');
 		else if (token.length() == 1 && (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/'))
@@ -43,48 +45,30 @@ void RPN::evaluate(const std::string &expression)
 
 void RPN::_applyOperation(char operation)
 {
-	if (_stack.empty())
-		throw std::runtime_error("Error: operation performed on empty stack!");
+	if (_stack.size() < 2)
+		throw std::runtime_error("Error");
+	int right = _stack.top();
+	_stack.pop();
+	int left = _stack.top();
+	_stack.pop();
 	switch(operation)
 	{
 		case '+':
-		{
-			int num1 = _stack.top();
-			_stack.pop();
-			int num2 = _stack.top();
-			_stack.pop();
-			_stack.push(num1 + num2);
+			_stack.push(left + right);
 			break;
-		}
 		case '-':
-		{
-			int num1 = _stack.top();
-			_stack.pop();
-			int num2 = _stack.top();
-			_stack.pop();
-			_stack.push(num1 - num2);
+			_stack.push(left - right);
 			break;
-		}
 		case '/':
-		{
-			int num1 = _stack.top();
-			_stack.pop();
-			int num2 = _stack.top();
-			_stack.pop();
-			_stack.push(num1 / num2);
+			if (right == 0)
+				throw std::runtime_error("Error");
+			_stack.push(left / right);
 			break;
-		}
 		case '*':
-		{
-			int num1 = _stack.top();
-			_stack.pop();
-			int num2 = _stack.top();
-			_stack.pop();
-			_stack.push(num1 * num2);
+			_stack.push(left * right);
 			break;
-		}
 		default:
-			break;	
+			throw std::runtime_error("Error");
 	}
 }
 

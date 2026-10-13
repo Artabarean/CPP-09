@@ -55,7 +55,7 @@ void BitcoinExchange::processInput(const std::string &filename)
 	}
 	
 	std::string line;
-	std::getline(file, line); // Skip header line
+	std::getline(file, line);
 	
 	while (std::getline(file, line))
 	{
@@ -68,7 +68,6 @@ void BitcoinExchange::processInput(const std::string &filename)
 
 bool BitcoinExchange::_isValidDate(const std::string &date)
 {
-	// Format: YYYY-MM-DD
 	if (date.length() != 10)
 		return false;
 	
@@ -92,8 +91,6 @@ bool BitcoinExchange::_isValidDate(const std::string &date)
 	
 	if (day < 1 || day > 31)
 		return false;
-	
-	// Validation for specific months
 	if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
 		return false;
 	
@@ -111,8 +108,6 @@ bool BitcoinExchange::_isValidValue(const std::string &value)
 {
 	if (value.empty())
 		return false;
-	
-	// Check if it's a valid number
 	size_t dotCount = 0;
 	for (size_t i = 0; i < value.length(); i++)
 	{
@@ -129,8 +124,7 @@ bool BitcoinExchange::_isValidValue(const std::string &value)
 	try
 	{
 		float numValue = _stringToFloat(value);
-		
-		// Check if value is between 0 and 1000
+
 		if (numValue < 0 || numValue > 1000)
 			return false;
 	}
@@ -155,7 +149,6 @@ float BitcoinExchange::_stringToFloat(const std::string &str)
 
 void BitcoinExchange::_processLine(const std::string &line)
 {
-	// Format: "date | value"
 	size_t pos = line.find(" | ");
 	
 	if (pos == std::string::npos)
@@ -167,14 +160,12 @@ void BitcoinExchange::_processLine(const std::string &line)
 	std::string date = line.substr(0, pos);
 	std::string value = line.substr(pos + 3);
 	
-	// Validate date
 	if (!_isValidDate(date))
 	{
 		std::cout << "Error: bad input => " << date << std::endl;
 		return;
 	}
 	
-	// Validate value
 	if (!_isValidValue(value))
 	{
 		if (value.find('-') != std::string::npos)
@@ -201,7 +192,6 @@ void BitcoinExchange::_processLine(const std::string &line)
 	{
 		float btcAmount = _stringToFloat(value);
 		
-		// Find the exact date or the closest lower date
 		std::map<std::string, float>::iterator it = _priceDB.upper_bound(date);
 		
 		if (it != _priceDB.begin())
@@ -212,7 +202,6 @@ void BitcoinExchange::_processLine(const std::string &line)
 			
 			std::cout << date << " => ";
 			
-			// Print the value without decimals if it's an integer
 			if (btcAmount == (int)btcAmount)
 				std::cout << (int)btcAmount;
 			else
