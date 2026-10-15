@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:56:46 by atabarea          #+#    #+#             */
-/*   Updated: 2026/08/31 12:48:40 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/10/15 12:15:32 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class BitcoinExchange
 		void	processInput(const std::string &filename);
 	
 	private:
-		std::map<std::string, float>	_priceDB;  // STL Container: map para almacenar fecha -> tasa de cambio
+		std::map<std::string, float>	_priceDB;
 		
 		bool	_isValidDate(const std::string &date);
 		bool	_isValidValue(const std::string &value);
