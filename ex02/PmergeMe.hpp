@@ -13,6 +13,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 class PmergeMe
 {
@@ -21,6 +22,7 @@ class PmergeMe
 		PmergeMe(const PmergeMe& obj);
 		~PmergeMe(void);
 		PmergeMe &operator=(const PmergeMe& obj);
-		int  process_input(char* argv[]);
+		int  process_input(int argc, char* argv[]);
 	private:
+
 };

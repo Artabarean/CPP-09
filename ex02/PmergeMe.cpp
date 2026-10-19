@@ -30,7 +30,13 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &obj)
 
 }
 
-int PmergeMe::process_input(char* argv[])
+int PmergeMe::process_input(int argc, char* argv[])
 {
-	
+	std::vector<int> unsorted;
+	for (size_t i = 0; i < (argc - 1); ++i)
+	{
+		unsorted.push_back(atoi(argv[i]));
+	}
+	std::cout << unsorted[unsorted.size() - 1] << std::endl;
+	return (0);
 }
