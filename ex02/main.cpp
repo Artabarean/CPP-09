@@ -19,8 +19,8 @@ int main(int argc, char* argv[])
 		std::cerr << "Error: Not enough elements" << std::endl;
 		return (1);
 	}
-	PmergeMe *array;
-	if (array->process_input(argc, argv) == -1)
+	PmergeMe array;
+	if (array.process_input(argc, argv) == -1)
 	{
 		std::cerr << "Error" << std::endl;
 		return (1);

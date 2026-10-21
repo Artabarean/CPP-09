@@ -13,7 +13,10 @@
 #pragma once
 
 #include <iostream>
+#include <cstdlib>
 #include <vector>
+#include <cerrno>
+#include <climits>
 
 class PmergeMe
 {
@@ -23,6 +26,8 @@ class PmergeMe
 		~PmergeMe(void);
 		PmergeMe &operator=(const PmergeMe& obj);
 		int  process_input(int argc, char* argv[]);
+		bool isValidNum(const char *input, int &number);
+		bool isNum(const char *input);
 	private:
 
 };
