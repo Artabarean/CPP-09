@@ -82,31 +82,34 @@ int PmergeMe::process_input(int argc, char* argv[])
 	// {
 	// 	std::cout << unsorted[i] << std::endl;
 	// }
-	std::vector<int> biggest_in_pair;
-	std::vector<int> smallest_in_pair;
+	std::vector<t_pair> pairs;
 	std::vector<int>::iterator it;
-	int first_compared;
-	int second_compared;
+	bool hasStraggler = false;
+	int straggler = 0;
+	int first;
+	int second;
 	for (it = unsorted.begin(); it != unsorted.end(); it++)
 	{
-		first_compared = *it;
+		first = *it;
 		if (it + 1 != unsorted.end())
 		{
+			t_pair pair;
 			++it;
-			second_compared = *it;
-			if (first_compared > second_compared)
+			second = *it;
+			if (first < second)
 			{
-				biggest_in_pair.push_back(first_compared);
-				smallest_in_pair.push_back(second_compared);
+				pair.small = first;
+				pair.large = second;
 			}
 			else
 			{
-				biggest_in_pair.push_back(second_compared);
-				smallest_in_pair.push_back(first_compared);
+				pair.small = second;
+				pair.large = first;
 			}
+			pairs.push_back(pair);
 		}
 		else
-			smallest_in_pair.push_back(first_compared);
+			straggler = first;
 	}
 	// std::cout << "biggest_in_pair:" << std::endl;
 	// for (size_t i = 0; i < biggest_in_pair.size(); ++i)

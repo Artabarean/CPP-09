@@ -29,5 +29,12 @@ class PmergeMe
 		bool isValidNum(const char *input, int &number);
 		bool isNum(const char *input);
 	private:
+		typedef struct s_pair
+		{
+			int small;
+			int large;
+		} t_pair;
+		
+		void fordJohnson(std::vector<t_pair>& pairs);
 
 };
