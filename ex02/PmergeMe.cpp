@@ -84,42 +84,88 @@ int PmergeMe::process_input(int argc, char* argv[])
 	// }
 	std::vector<t_pair> pairs;
 	std::vector<int>::iterator it;
-	bool hasStraggler = false;
-	int straggler = 0;
-	int first;
-	int second;
+	int first_num;
+	int second_num;
 	for (it = unsorted.begin(); it != unsorted.end(); it++)
 	{
-		first = *it;
+		first_num = *it;
 		if (it + 1 != unsorted.end())
 		{
 			t_pair pair;
 			++it;
-			second = *it;
-			if (first < second)
+			second_num = *it;
+			if (first_num < second_num)
 			{
-				pair.small = first;
-				pair.large = second;
+				pair.small = first_num;
+				pair.large = second_num;
 			}
 			else
 			{
-				pair.small = second;
-				pair.large = first;
+				pair.small = second_num;
+				pair.large = first_num;
 			}
 			pairs.push_back(pair);
 		}
-		else
-			straggler = first;
 	}
-	// std::cout << "biggest_in_pair:" << std::endl;
-	// for (size_t i = 0; i < biggest_in_pair.size(); ++i)
-	// {
-	// 	std::cout << biggest_in_pair[i] << std::endl;
-	// }
-	// std::cout << "smallest_in_pair:" << std::endl;
-	// for (size_t i = 0; i < smallest_in_pair.size(); ++i)
-	// {
-	// 	std::cout << smallest_in_pair[i] << std::endl;
-	// }
+	fordJohnson(pairs);
+	std::vector<int>mainChain = buildMainChain(pairs);
 	return (0);
+}
+
+void PmergeMe::fordJohnson(std::vector<t_pair>& pairs)
+{
+	if (pairs.size() < 2)
+		return ;
+	std::vector<t_pair> winners;
+	std::vector<t_pair> losers;
+	std::vector<t_pair>::iterator it = pairs.begin();
+	while (it != pairs.end())
+	{
+		t_pair first = *it++;
+		if (it == pairs.end())
+		{
+			losers.push_back(first);
+			break ;
+		}
+		t_pair second = *it++;
+		if (first.large < second.large)
+		{
+			winners.push_back(second);
+			losers.push_back(first);
+		}
+		else
+		{
+			winners.push_back(first);
+			losers.push_back(second);
+		}
+	}
+	fordJohnson(winners);
+	std::vector<t_pair> chain;
+	chain.push_back(losers.front());
+	chain.insert(chain.end(), winners.begin(), winners.end());
+	for (size_t i = 1; i < losers.size(); ++i)
+	{
+		t_pair value = losers[i];
+		std::vector<t_pair>::iterator position = chain.begin();
+		while (position != chain.end() && position->large < value.large)
+			++position;
+		chain.insert(position, value);
+	}
+	pairs = chain;
+}
+
+std::vector<int> PmergeMe::buildMainChain(std::vector<t_pair>& pairs)
+{
+	std::vector<int> mainChain;
+
+	std::vector<t_pair>::iterator position = pairs.begin();
+	while (position != pairs.end())
+	{
+		t_pair currentPair = *position;
+		if (position == pairs.begin())
+			mainChain.push_back(currentPair.small);
+		mainChain.push_back(currentPair.large);
+		++position;
+	}
+	return (mainChain);
 }
