@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:26 by atabarea          #+#    #+#             */
-/*   Updated: 2026/10/27 12:24:59 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/05 13:12:59 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,6 @@ int PmergeMe::process_input(int argc, char* argv[])
 		}
 		unsorted.push_back(number);
 	}
-	// for (size_t i = 0; i < unsorted.size(); ++i)
-	// {
-	// 	std::cout << unsorted[i] << std::endl;
-	// }
 	std::vector<t_pair> pairs;
 	std::vector<int>::iterator it;
 	int first_num;
@@ -109,6 +105,12 @@ int PmergeMe::process_input(int argc, char* argv[])
 	}
 	fordJohnson(pairs);
 	std::vector<int>mainChain = buildMainChain(pairs);
+	std::vector<int>sorted = mainChain;
+	std::vector<t_pair> pos;
+	for (std::vector<t_pair>::iterator it = pairs.begin(); it != pairs.end(); ++it)
+	{
+		pos = lower_bound(sorted.begin(), sorted.end(), *it);
+	}
 	return (0);
 }
 
