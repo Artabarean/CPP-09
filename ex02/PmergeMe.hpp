@@ -36,7 +36,11 @@ class PmergeMe
 		} t_pair;
 		
 		void fordJohnson(std::vector<t_pair>& pairs);
-		std::vector<int> buildMainChain(std::vector<t_pair>& pairs);
-		void insertPendingValues(std::vector<t_pair>& Main_chain);
-		std::vector<size_t> generateJacobsthalOrder(std::vector<t_pair>& Main_chain);
+		std::vector<int> buildMainChain(const std::vector<t_pair>& pairs);
+		void insertPendingValues(std::vector<int>& mainChain,
+			const std::vector<t_pair>& pairs);
+		std::vector<size_t> generateJacobsthalOrder(
+			const std::vector<t_pair>& pairs);
+		size_t binarySearch(const std::vector<int>& values, int value,
+			size_t end) const;
 };

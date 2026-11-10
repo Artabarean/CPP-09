@@ -79,38 +79,52 @@ int PmergeMe::process_input(int argc, char* argv[])
 		unsorted.push_back(number);
 	}
 	std::vector<t_pair> pairs;
+	bool hasOdd = (unsorted.size() % 2 != 0);
+	int odd = 0;
+	if (hasOdd)
+	{
+		odd = unsorted.back();
+		unsorted.pop_back();
+	}
 	std::vector<int>::iterator it;
-	int first_num;
-	int second_num;
 	for (it = unsorted.begin(); it != unsorted.end(); it++)
 	{
-		first_num = *it;
-		if (it + 1 != unsorted.end())
+		t_pair pair;
+		int first_num = *it;
+		int second_num = *(it + 1);
+		if (first_num < second_num)
 		{
-			t_pair pair;
-			++it;
-			second_num = *it;
-			if (first_num < second_num)
-			{
-				pair.small = first_num;
-				pair.large = second_num;
-			}
-			else
-			{
-				pair.small = second_num;
-				pair.large = first_num;
-			}
-			pairs.push_back(pair);
+			pair.small = first_num;
+			pair.large = second_num;
 		}
+		else
+		{
+			pair.small = second_num;
+			pair.large = first_num;
+		}
+		pairs.push_back(pair);
+		++it;
 	}
 	fordJohnson(pairs);
-	std::vector<int>mainChain = buildMainChain(pairs);
-	std::vector<int>sorted = mainChain;
-	std::vector<t_pair> pos;
-	for (std::vector<t_pair>::iterator it = pairs.begin(); it != pairs.end(); ++it)
+	std::vector<int> mainChain = buildMainChain(pairs);
+	if (!pairs.empty())
+		insertPendingValues(mainChain, pairs);
+	if (hasOdd)
 	{
-		pos = lower_bound(sorted.begin(), sorted.end(), *it);
+		size_t position = binarySearch(mainChain, odd, mainChain.size());
+		mainChain.insert(mainChain.begin() + position, odd);
 	}
+	std::cout << "Before: ";
+	for (std::vector<int>::const_iterator value = unsorted.begin();
+		value != unsorted.end(); ++value)
+		std::cout << *value << " ";
+	if (hasOdd)
+		std::cout << odd << " ";
+	std::cout << std::endl << "After:  ";
+	for (std::vector<int>::const_iterator value = mainChain.begin();
+		value != mainChain.end(); ++value)
+		std::cout << *value << " ";
+	std::cout << std::endl;
 	return (0);
 }
 
@@ -118,49 +132,34 @@ void PmergeMe::fordJohnson(std::vector<t_pair>& pairs)
 {
 	if (pairs.size() < 2)
 		return ;
-	std::vector<t_pair> winners;
-	std::vector<t_pair> losers;
-	std::vector<t_pair>::iterator it = pairs.begin();
-	while (it != pairs.end())
+	size_t middle = pairs.size() / 2;
+	std::vector<t_pair> left(pairs.begin(), pairs.begin() + middle);
+	std::vector<t_pair> right(pairs.begin() + middle, pairs.end());
+	fordJohnson(left);
+	fordJohnson(right);
+
+	std::vector<t_pair> sorted;
+	std::vector<t_pair>::const_iterator leftIt = left.begin();
+	std::vector<t_pair>::const_iterator rightIt = right.begin();
+	while (leftIt != left.end() && rightIt != right.end())
 	{
-		t_pair first = *it++;
-		if (it == pairs.end())
-		{
-			losers.push_back(first);
-			break ;
-		}
-		t_pair second = *it++;
-		if (first.large < second.large)
-		{
-			winners.push_back(second);
-			losers.push_back(first);
-		}
+		if (leftIt->large <= rightIt->large)
+			sorted.push_back(*leftIt++);
 		else
-		{
-			winners.push_back(first);
-			losers.push_back(second);
-		}
+			sorted.push_back(*rightIt++);
 	}
-	fordJohnson(winners);
-	std::vector<t_pair> chain;
-	chain.push_back(losers.front());
-	chain.insert(chain.end(), winners.begin(), winners.end());
-	for (size_t i = 1; i < losers.size(); ++i)
-	{
-		t_pair value = losers[i];
-		std::vector<t_pair>::iterator position = chain.begin();
-		while (position != chain.end() && position->large < value.large)
-			++position;
-		chain.insert(position, value);
-	}
-	pairs = chain;
+	while (leftIt != left.end())
+		sorted.push_back(*leftIt++);
+	while (rightIt != right.end())
+		sorted.push_back(*rightIt++);
+	pairs = sorted;
 }
 
-std::vector<int> PmergeMe::buildMainChain(std::vector<t_pair>& pairs)
+std::vector<int> PmergeMe::buildMainChain(const std::vector<t_pair>& pairs)
 {
 	std::vector<int> mainChain;
 
-	std::vector<t_pair>::iterator position = pairs.begin();
+	std::vector<t_pair>::const_iterator position = pairs.begin();
 	while (position != pairs.end())
 	{
 		t_pair currentPair = *position;
@@ -170,4 +169,60 @@ std::vector<int> PmergeMe::buildMainChain(std::vector<t_pair>& pairs)
 		++position;
 	}
 	return (mainChain);
+}
+
+size_t PmergeMe::binarySearch(const std::vector<int>& values, int value, size_t end) const
+{
+	size_t begin = 0;
+	while (begin < end)
+	{
+		size_t middle = begin + (end - begin) / 2;
+		if (values[middle] < value)
+			begin = middle + 1;
+		else
+			end = middle;
+	}
+	return (begin);
+}
+
+std::vector<size_t> PmergeMe::generateJacobsthalOrder(const std::vector<t_pair>& pairs)
+{
+	std::vector<size_t> order;
+	size_t previous = 1;
+	size_t current = 3;
+
+	while (previous < pairs.size())
+	{
+		size_t end = current;
+		if (end > pairs.size())
+			end = pairs.size();
+		for (size_t index = end; index > previous; --index)
+			order.push_back(index - 1);
+		size_t next = current + 2 * previous;
+		previous = current;
+		current = next;
+	}
+	return (order);
+}
+
+void PmergeMe::insertPendingValues(std::vector<int>& mainChain, const std::vector<t_pair>& pairs)
+{
+	std::vector<size_t> largePositions;
+	for (size_t index = 0; index < pairs.size(); ++index)
+		largePositions.push_back(index + 1);
+
+	std::vector<size_t> order = generateJacobsthalOrder(pairs);
+	for (std::vector<size_t>::const_iterator index = order.begin();
+		index != order.end(); ++index)
+	{
+		size_t pairIndex = *index;
+		size_t position = binarySearch(mainChain, pairs[pairIndex].small,
+			largePositions[pairIndex]);
+		mainChain.insert(mainChain.begin() + position, pairs[pairIndex].small);
+		for (size_t current = 0; current < largePositions.size(); ++current)
+		{
+			if (largePositions[current] >= position)
+				++largePositions[current];
+		}
+	}
 }
