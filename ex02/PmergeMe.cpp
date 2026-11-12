@@ -115,15 +115,17 @@ int PmergeMe::process_input(int argc, char* argv[])
 		mainChain.insert(mainChain.begin() + position, odd);
 	}
 	std::cout << "Before: ";
-	for (std::vector<int>::const_iterator value = unsorted.begin();
-		value != unsorted.end(); ++value)
+	for (std::vector<int>::const_iterator value = unsorted.begin(); value != unsorted.end(); ++value)
+	{
 		std::cout << *value << " ";
+	}
 	if (hasOdd)
 		std::cout << odd << " ";
 	std::cout << std::endl << "After:  ";
-	for (std::vector<int>::const_iterator value = mainChain.begin();
-		value != mainChain.end(); ++value)
+	for (std::vector<int>::const_iterator value = mainChain.begin(); value != mainChain.end(); ++value)
+	{
 		std::cout << *value << " ";
+	}
 	std::cout << std::endl;
 	return (0);
 }
@@ -197,7 +199,9 @@ std::vector<size_t> PmergeMe::generateJacobsthalOrder(const std::vector<t_pair>&
 		if (end > pairs.size())
 			end = pairs.size();
 		for (size_t index = end; index > previous; --index)
+		{
 			order.push_back(index - 1);
+		}
 		size_t next = current + 2 * previous;
 		previous = current;
 		current = next;
@@ -209,11 +213,11 @@ void PmergeMe::insertPendingValues(std::vector<int>& mainChain, const std::vecto
 {
 	std::vector<size_t> largePositions;
 	for (size_t index = 0; index < pairs.size(); ++index)
+	{
 		largePositions.push_back(index + 1);
-
+	}
 	std::vector<size_t> order = generateJacobsthalOrder(pairs);
-	for (std::vector<size_t>::const_iterator index = order.begin();
-		index != order.end(); ++index)
+	for (std::vector<size_t>::const_iterator index = order.begin(); index != order.end(); ++index)
 	{
 		size_t pairIndex = *index;
 		size_t position = binarySearch(mainChain, pairs[pairIndex].small,
