@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:26 by atabarea          #+#    #+#             */
-/*   Updated: 2026/11/05 13:12:59 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/16 11:29:11 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int PmergeMe::process_input(int argc, char* argv[])
 		unsorted.pop_back();
 	}
 	std::vector<int>::iterator it;
-	for (it = unsorted.begin(); it != unsorted.end(); it++)
+	for (it = unsorted.begin(); it != unsorted.end(); ++it)
 	{
 		t_pair pair;
 		int first_num = *it;
@@ -103,7 +103,6 @@ int PmergeMe::process_input(int argc, char* argv[])
 			pair.large = first_num;
 		}
 		pairs.push_back(pair);
-		++it;
 	}
 	fordJohnson(pairs);
 	std::vector<int> mainChain = buildMainChain(pairs);
@@ -220,8 +219,7 @@ void PmergeMe::insertPendingValues(std::vector<int>& mainChain, const std::vecto
 	for (std::vector<size_t>::const_iterator index = order.begin(); index != order.end(); ++index)
 	{
 		size_t pairIndex = *index;
-		size_t position = binarySearch(mainChain, pairs[pairIndex].small,
-			largePositions[pairIndex]);
+		size_t position = binarySearch(mainChain, pairs[pairIndex].small, largePositions[pairIndex]);
 		mainChain.insert(mainChain.begin() + position, pairs[pairIndex].small);
 		for (size_t current = 0; current < largePositions.size(); ++current)
 		{

@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:28 by atabarea          #+#    #+#             */
-/*   Updated: 2026/10/15 12:33:28 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/16 11:16:36 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,10 @@ class PmergeMe
 			int small;
 			int large;
 		} t_pair;
-		
+
 		void fordJohnson(std::vector<t_pair>& pairs);
 		std::vector<int> buildMainChain(const std::vector<t_pair>& pairs);
-		void insertPendingValues(std::vector<int>& mainChain,
-			const std::vector<t_pair>& pairs);
-		std::vector<size_t> generateJacobsthalOrder(
-			const std::vector<t_pair>& pairs);
-		size_t binarySearch(const std::vector<int>& values, int value,
-			size_t end) const;
+		void insertPendingValues(std::vector<int>& mainChain, const std::vector<t_pair>& pairs);
+		std::vector<size_t> generateJacobsthalOrder(const std::vector<t_pair>& pairs);
+		size_t binarySearch(const std::vector<int>& values, int value, size_t end) const;
 };

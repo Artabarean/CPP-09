@@ -11,25 +11,19 @@ BitcoinExchange::~BitcoinExchange()
 void BitcoinExchange::loadDatabase(const std::string &filename)
 {
 	std::ifstream file(filename.c_str());
-	
 	if (!file.is_open())
 		throw std::runtime_error("Error: could not open file.");
-	
 	std::string line;
 	std::getline(file, line);
-	
 	while (std::getline(file, line))
 	{
 		if (line.empty())
 			continue;
-		
 		size_t pos = line.find(',');
 		if (pos == std::string::npos)
 			continue;
-		
 		std::string date = line.substr(0, pos);
 		std::string rate = line.substr(pos + 1);
-		
 		try
 		{
 			float exchangeRate = _stringToFloat(rate);
@@ -40,7 +34,6 @@ void BitcoinExchange::loadDatabase(const std::string &filename)
 			std::cerr << "Warning: " << e.what() << std::endl;
 		}
 	}
-	
 	file.close();
 }
 
@@ -69,45 +62,38 @@ void BitcoinExchange::processInput(const std::string &filename)
 bool BitcoinExchange::_isValidDate(const std::string &date)
 {
 	if (date.length() != 10)
-		return false;
-	
+		return (false);	
 	if (date[4] != '-' || date[7] != '-')
-		return false;
-	
+		return (false);	
 	for (int i = 0; i < 10; i++)
 	{
 		if (i == 4 || i == 7)
 			continue;
 		if (!isdigit(date[i]))
-			return false;
-	}
-	
+			return (false);
+	}	
 	int year = atoi(date.substr(0, 4).c_str());
 	int month = atoi(date.substr(5, 2).c_str());
-	int day = atoi(date.substr(8, 2).c_str());
-	
+	int day = atoi(date.substr(8, 2).c_str());	
 	if (month < 1 || month > 12)
-		return false;
-	
+		return (false);	
 	if (day < 1 || day > 31)
-		return false;
+		return (false);
 	if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
-		return false;
-	
+		return (false);
 	if (month == 2)
 	{
 		bool isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 		if (day > (isLeap ? 29 : 28))
-			return false;
+			return (false);
 	}
-	
 	return true;
 }
 
 bool BitcoinExchange::_isValidValue(const std::string &value)
 {
 	if (value.empty())
-		return false;
+		return (false);
 	size_t dotCount = 0;
 	for (size_t i = 0; i < value.length(); i++)
 	{
@@ -115,25 +101,23 @@ bool BitcoinExchange::_isValidValue(const std::string &value)
 		{
 			dotCount++;
 			if (dotCount > 1)
-				return false;
+				return (false);
 		}
 		else if (!isdigit(value[i]))
-			return false;
+			return (false);
 	}
-	
 	try
 	{
 		float numValue = _stringToFloat(value);
 
 		if (numValue < 0 || numValue > 1000)
-			return false;
+			return (false);
 	}
 	catch (std::exception &e)
 	{
-		return false;
+		return (false);
 	}
-	
-	return true;
+	return (true);
 }
 
 float BitcoinExchange::_stringToFloat(const std::string &str)
@@ -143,8 +127,7 @@ float BitcoinExchange::_stringToFloat(const std::string &str)
 	
 	if (*end != '\0')
 		throw std::invalid_argument("Invalid number format");
-	
-	return result;
+	return (result);
 }
 
 void BitcoinExchange::_processLine(const std::string &line)
@@ -156,16 +139,13 @@ void BitcoinExchange::_processLine(const std::string &line)
 		std::cout << "Error: bad input => " << line << std::endl;
 		return;
 	}
-	
 	std::string date = line.substr(0, pos);
 	std::string value = line.substr(pos + 3);
-	
 	if (!_isValidDate(date))
 	{
 		std::cout << "Error: bad input => " << date << std::endl;
 		return;
 	}
-	
 	if (!_isValidValue(value))
 	{
 		if (value.find('-') != std::string::npos)
@@ -187,26 +167,24 @@ void BitcoinExchange::_processLine(const std::string &line)
 		}
 		return;
 	}
-	
 	try
 	{
 		float btcAmount = _stringToFloat(value);
-		
 		std::map<std::string, float>::iterator it = _priceDB.upper_bound(date);
-		
 		if (it != _priceDB.begin())
 		{
 			--it;
 			float exchangeRate = it->second;
 			float result = btcAmount * exchangeRate;
-			
 			std::cout << date << " => ";
-			
 			if (btcAmount == (int)btcAmount)
+			{
 				std::cout << (int)btcAmount;
+			}
 			else
+			{
 				std::cout << std::fixed << std::setprecision(1) << btcAmount;
-			
+			}
 			std::cout << " = " << std::fixed << std::setprecision(2) << result << std::endl;
 		}
 		else

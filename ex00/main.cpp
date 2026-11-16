@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:56:49 by atabarea          #+#    #+#             */
-/*   Updated: 2026/08/31 12:48:23 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/16 12:01:56 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
 		std::cout << "Error: could not open file." << std::endl;
 		return (1);
 	}
-	
 	try
 	{
 		BitcoinExchange exchange;
@@ -31,7 +30,6 @@ int main(int argc, char *argv[])
 		std::cerr << e.what() << std::endl;
 		return (1);
 	}
-	
 	return (0);
 }
 
