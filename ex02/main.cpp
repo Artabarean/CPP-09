@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:31 by atabarea          #+#    #+#             */
-/*   Updated: 2026/11/19 12:54:12 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/19 14:21:26 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static double nowUs(void)
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 100000.0 + tv.tv_usec);
+	return (tv.tv_sec * 1000000.0 + tv.tv_usec);
 }
 
 int main(int argc, char* argv[])
@@ -29,10 +29,12 @@ int main(int argc, char* argv[])
 		return (1);
 	}
 	PmergeMe array;
+	if (array.process_input(argc, argv) == -1)
+		return(1);
 	double vectorTimeUs = 0.0;
 	double dequeTimeUs = 0.0;
 	double startUs = nowUs();
-	int vectorReturn = array.process_input(argc, argv);
+	int vectorReturn = array.process_input_vector(argc, argv);
 	vectorTimeUs = nowUs() - startUs;
 	if (vectorReturn == -1)
 		return (1);
@@ -41,12 +43,12 @@ int main(int argc, char* argv[])
 	dequeTimeUs = nowUs() - startUs;
 	if (dequeReturn == -1)
 		return (1);
-	double vectorTimeSec = vectorTimeUs / 100000.0;
-	double dequeTimeSec = dequeTimeUs / 100000.0;
-	std::cout << std::fixed << std::setprecision(5);
+	double vectorTimeSec = vectorTimeUs / 1000000.0;
+	double dequeTimeSec = dequeTimeUs / 1000000.0;
+	std::cout << std::fixed << std::setprecision(6);
 	std::cout << "Time to process a range of " << (argc - 1)
-          << " elements with std::vector : " << vectorTimeSec << " us" << std::endl;
+          << " elements with std::vector : " << vectorTimeSec << " s" << std::endl;
 	std::cout << "Time to process a range of " << (argc - 1)
-          << " elements with std::deque  : " << dequeTimeSec << " us" << std::endl;
+          << " elements with std::deque  : " << dequeTimeSec << " s" << std::endl;
 	return (0);
 }

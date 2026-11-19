@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:28 by atabarea          #+#    #+#             */
-/*   Updated: 2026/11/19 12:27:24 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/19 14:34:45 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class PmergeMe
 		~PmergeMe(void);
 		PmergeMe &operator=(const PmergeMe& obj);
 		int  process_input(int argc, char* argv[]);
+		int	 process_input_vector(int argc, char* argv[]);
 		int  process_input_deque(int argc, char* argv[]);
 		bool isValidNum(const char *input, int &number);
 		bool isNum(const char *input);
@@ -39,7 +40,7 @@ class PmergeMe
 
 		template <typename Container, typename PairContainer>
 		int processInputForContainer(int argc, char* argv[], bool printBefore,
-			bool printAfter, const char* afterLabel);
+			bool printAfter);
 		template <typename PairContainer>
 		void fordJohnson(PairContainer& pairs);
 		template <typename Container, typename PairContainer>

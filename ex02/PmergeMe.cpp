@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:26 by atabarea          #+#    #+#             */
-/*   Updated: 2026/11/19 12:27:23 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/19 14:35:14 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,24 @@ bool PmergeMe::isValidNum(const char* input, int &number)
 int PmergeMe::process_input(int argc, char* argv[])
 {
 	return (processInputForContainer<std::vector<int>, std::vector<t_pair> >(argc,
-			argv, true, true, "After:  "));
+			argv, true, true));
+}
+
+int PmergeMe::process_input_vector(int argc, char* argv[])
+{
+	return (processInputForContainer<std::vector<int>, std::vector<t_pair> >(argc,
+			argv, false, false));
 }
 
 int PmergeMe::process_input_deque(int argc, char* argv[])
 {
 	return (processInputForContainer<std::deque<int>, std::deque<t_pair> >(argc,
-			argv, false, false, ""));
+			argv, false, false));
 }
 
 template <typename Container, typename PairContainer>
 int PmergeMe::processInputForContainer(int argc, char* argv[], bool printBefore,
-	bool printAfter, const char* afterLabel)
+	bool printAfter)
 {
 	Container unsorted;
 	Container originalValues;
@@ -141,7 +147,7 @@ int PmergeMe::processInputForContainer(int argc, char* argv[], bool printBefore,
 	}
 	if (printAfter)
 	{
-		std::cout << afterLabel;
+		std::cout << "After: ";
 		for (typename Container::const_iterator value = mainChain.begin(); value != mainChain.end(); ++value)
 		{
 			std::cout << *value << " ";
