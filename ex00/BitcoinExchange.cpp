@@ -84,7 +84,7 @@ bool BitcoinExchange::_isValidDate(const std::string &date)
 	if (month == 2)
 	{
 		bool isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-		if (day > (isLeap ? 29 : 28))
+		if (isLeap == 0 && day > 28)
 			return (false);
 	}
 	return true;
