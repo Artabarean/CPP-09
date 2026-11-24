@@ -6,7 +6,7 @@
 /*   By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 14:19:36 by atabarea          #+#    #+#             */
-/*   Updated: 2026/10/13 14:19:36 by atabarea         ###   ########.fr       */
+/*   Updated: 2026/11/24 12:07:13 by atabarea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,9 @@ class RPN
 		RPN(void);
 		RPN(const RPN &obj);
 		RPN &operator=(const RPN &obj);
-		~RPN(void);
-		
+		~RPN(void);		
 		void evaluate(const std::string &expression);
-
-		private:
-			std::stack<int> _stack;
-			void _applyOperation(char operation);
-
-
+	private:
+		std::stack<int> _stack;
+		void _applyOperation(char operation);
 };
