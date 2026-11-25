@@ -6,7 +6,7 @@
 #    By: atabarea <atabarea@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/06/29 11:56:54 by atabarea          #+#    #+#              #
-#    Updated: 2026/06/29 11:59:07 by atabarea         ###   ########.fr        #
+#    Updated: 2026/11/25 12:51:04 by atabarea         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,12 +36,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
-	rm -f $(OBJS)
-
-fclean: clean
-	rm -f $(NAME)
-
-re: fclean all
-
-.PHONY: clean fclean re
